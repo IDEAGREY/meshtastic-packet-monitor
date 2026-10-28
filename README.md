@@ -2,13 +2,17 @@
 
 A small terminal monitor for a Meshtastic node connected over USB serial. It displays received packet types, sender and recipient names when available, packet metadata, decoded fields, readable text messages, and payload bytes.
 
-## What it can see
+## What it shows
 
-- Packets received by the connected node on its configured frequency, modem preset, and channels.
-- Text messages and decoded packet fields only when the node can decrypt and decode them.
-- Names only for nodes present in the connected node's local node database.
+For packets the connected node receives, the monitor can display:
 
-It does not scan the LoRa band or bypass channel encryption. A publicly keyed channel can be read when the radio settings match; custom channel keys and end-to-end encrypted direct messages are not recovered by this tool. Decoded position packets can contain coordinates. Treat captured output as potentially sensitive.
+- **Names and IDs:** sender and recipient names from the node database, plus Meshtastic node IDs. Names appear after the node learns that node's information.
+- **Messages:** decoded text when the radio has the channel key. The default LongFast channel uses the published `AQ==` PSK, so its messages are readable with matching radio settings. A custom channel requires its PSK; direct messages protected by node keys remain private.
+- **Reported location:** decoded `POSITION_APP` details such as latitude, longitude, altitude, time, location source, and precision when those fields are present. These are coordinates carried in the packet by the sending node.
+- **Telemetry:** fields such as battery level, voltage, uptime, channel utilization, and transmit airtime when provided.
+- **Packet and radio details:** packet type and ID, channel, hop limit, RSSI, SNR, decoded routing or node information, payload size, and payload bytes in hex.
+
+The output can contain message text and location data, so treat captured output as sensitive. The monitor shows location coordinates included in received position packets; it does not estimate location from signal strength or triangulate the radio transmitter. It also does not scan the LoRa band or bypass encryption: it formats packets delivered by the connected node on its configured frequency, modem preset, and channels.
 
 ## Requirements
 
